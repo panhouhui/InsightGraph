@@ -264,7 +264,7 @@ WITH d, avg_score,
      [c IN chunks | {id: c.chunk.id, score: c.score}] AS chunkdetails
 
 WITH d, avg_score, chunkdetails, 
-     apoc.text.join(texts, "\n----\n") AS text
+     reduce(text = "", item IN texts | text + CASE WHEN text = "" THEN "" ELSE "\n----\n" END + coalesce(item, "")) AS text
 
 RETURN text, 
        avg_score AS score, 
@@ -381,17 +381,21 @@ VECTOR_GRAPH_SEARCH_ENTITY_QUERY = """
 #     } AS metadata
 # """
 VECTOR_GRAPH_SEARCH_QUERY_SUFFIX = """
-   WITH apoc.coll.toSet(apoc.coll.flatten(collect(DISTINCT paths))) AS paths,
+   WITH reduce(flattened = [], pathGroup IN collect(DISTINCT paths) | flattened + coalesce(pathGroup, [])) AS paths,
         collect(DISTINCT e) AS entities
    // De-duplicate nodes and relationships across chunks
    RETURN
        collect {
            UNWIND paths AS p
+           WITH DISTINCT p
+           WHERE p IS NOT NULL
            UNWIND relationships(p) AS r
            RETURN DISTINCT r
        } AS rels,
        collect {
            UNWIND paths AS p
+           WITH DISTINCT p
+           WHERE p IS NOT NULL
            UNWIND nodes(p) AS n
            RETURN DISTINCT n
        } AS nodes,
@@ -403,37 +407,41 @@ WITH d, avg_score,
     [c IN chunks | {id: c.chunk.id, score: c.score}] AS chunkdetails,
     [n IN nodes | elementId(n)] AS entityIds,
     [r IN rels | elementId(r)] AS relIds,
-    apoc.coll.sort([
+    [
         n IN nodes |
-        coalesce(apoc.coll.removeAll(labels(n), ['__Entity__'])[0], "") + ":" +
-        coalesce(
+        coalesce(head([label IN labels(n) WHERE label <> '__Entity__']), "") + ":" +
+        toString(coalesce(
             n.id,
             n[head([k IN keys(n) WHERE k =~ "(?i)(name|title|id|description)$"])],
             ""
-        ) +
+        )) +
         (CASE WHEN n.description IS NOT NULL THEN " (" + n.description + ")" ELSE "" END)
-    ]) AS nodeTexts,
-    apoc.coll.sort([
+    ] AS nodeTexts,
+    [
         r IN rels |
-        coalesce(apoc.coll.removeAll(labels(startNode(r)), ['__Entity__'])[0], "") + ":" +
-        coalesce(
+        coalesce(head([label IN labels(startNode(r)) WHERE label <> '__Entity__']), "") + ":" +
+        toString(coalesce(
             startNode(r).id,
             startNode(r)[head([k IN keys(startNode(r)) WHERE k =~ "(?i)(name|title|id|description)$"])],
             ""
-        ) + " " + type(r) + " " +
-        coalesce(apoc.coll.removeAll(labels(endNode(r)), ['__Entity__'])[0], "") + ":" +
-        coalesce(
+        )) + " " + type(r) + " " +
+        coalesce(head([label IN labels(endNode(r)) WHERE label <> '__Entity__']), "") + ":" +
+        toString(coalesce(
             endNode(r).id,
             endNode(r)[head([k IN keys(endNode(r)) WHERE k =~ "(?i)(name|title|id|description)$"])],
             ""
-        )
-    ]) AS relTexts,
+        ))
+    ] AS relTexts,
     entities
 // Combine texts into response text
+WITH d, avg_score, chunkdetails, entityIds, relIds, entities,
+    reduce(text = "", item IN texts | text + CASE WHEN text = "" THEN "" ELSE "\n----\n" END + coalesce(item, "")) AS joinedTexts,
+    reduce(text = "", item IN nodeTexts | text + CASE WHEN text = "" THEN "" ELSE "\n" END + coalesce(item, "")) AS joinedNodes,
+    reduce(text = "", item IN relTexts | text + CASE WHEN text = "" THEN "" ELSE "\n" END + coalesce(item, "")) AS joinedRels
 WITH d, avg_score, chunkdetails, entityIds, relIds,
-    "Text Content:\n" + apoc.text.join(texts, "\n----\n") +
-    "\n----\nEntities:\n" + apoc.text.join(nodeTexts, "\n") +
-    "\n----\nRelationships:\n" + apoc.text.join(relTexts, "\n") AS text,
+    "Text Content:\n" + joinedTexts +
+    "\n----\nEntities:\n" + joinedNodes +
+    "\n----\nRelationships:\n" + joinedRels AS text,
     entities
 RETURN
    text,
@@ -503,7 +511,7 @@ WITH score, nodes, metadata,
          WITH m, collect(distinct r) AS rels, count(*) AS freq
          ORDER BY freq DESC 
          LIMIT {topOutsideRels}
-         WITH collect(m) AS outsideNodes, apoc.coll.flatten(collect(rels)) AS rels
+         WITH collect(m) AS outsideNodes, reduce(flattened = [], relGroup IN collect(rels) | flattened + coalesce(relGroup, [])) AS rels
          RETURN {{ nodes: outsideNodes, rels: rels }}
      }} AS outside
 """
@@ -516,7 +524,7 @@ RETURN {
     n IN nodes | 
     CASE 
       WHEN size(labels(n)) > 1 THEN 
-        apoc.coll.removeAll(labels(n), ["__Entity__"])[0] + ":" + n.id + " " + coalesce(n.description, "")
+        coalesce(head([label IN labels(n) WHERE label <> "__Entity__"]), "") + ":" + n.id + " " + coalesce(n.description, "")
       ELSE 
         n.id + " " + coalesce(n.description, "")
     END
@@ -530,7 +538,7 @@ RETURN {
       n IN outside[0].nodes | 
       CASE 
         WHEN size(labels(n)) > 1 THEN 
-          apoc.coll.removeAll(labels(n), ["__Entity__"])[0] + ":" + n.id + " " + coalesce(n.description, "")
+          coalesce(head([label IN labels(n) WHERE label <> "__Entity__"]), "") + ":" + n.id + " " + coalesce(n.description, "")
         ELSE 
           n.id + " " + coalesce(n.description, "")
       END
@@ -539,14 +547,14 @@ RETURN {
       r IN outside[0].rels | 
       CASE 
         WHEN size(labels(startNode(r))) > 1 THEN 
-          apoc.coll.removeAll(labels(startNode(r)), ["__Entity__"])[0] + ":" + startNode(r).id + " "
+          coalesce(head([label IN labels(startNode(r)) WHERE label <> "__Entity__"]), "") + ":" + startNode(r).id + " "
         ELSE 
           startNode(r).id + " "
       END + 
       type(r) + " " +
       CASE 
         WHEN size(labels(endNode(r))) > 1 THEN 
-          apoc.coll.removeAll(labels(endNode(r)), ["__Entity__"])[0] + ":" + endNode(r).id
+          coalesce(head([label IN labels(endNode(r)) WHERE label <> "__Entity__"]), "") + ":" + endNode(r).id
         ELSE 
           endNode(r).id
       END
@@ -638,7 +646,7 @@ WITH avg_score,
      [c IN communities | {id: elementId(c.community), score: c.score}] AS communityDetails
 
 WITH avg_score, communityDetails,
-     apoc.text.join(texts, "\n----\n") AS text
+     reduce(text = "", item IN texts | text + CASE WHEN text = "" THEN "" ELSE "\n----\n" END + coalesce(item, "")) AS text
 
 RETURN text,
        avg_score AS score,
