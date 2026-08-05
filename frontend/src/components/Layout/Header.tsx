@@ -8,7 +8,7 @@ import {
   ArrowLeftIconOutline,
   ArrowDownTrayIconOutline,
 } from '@neo4j-ndl/react/icons';
-import { Button, SpotlightTarget, TextLink, Typography, useSpotlightContext, Logo, Banner } from '@neo4j-ndl/react';
+import { Button, SpotlightTarget, TextLink, useSpotlightContext } from '@neo4j-ndl/react';
 import { useCallback, useContext, useEffect, useRef, useState, useMemo } from 'react';
 import { IconButtonWithToolTip } from '../UI/IconButtonToolTip';
 import { buttonCaptions, SKIP_AUTH, tooltips, URLS } from '../../utils/Constants';
@@ -22,6 +22,7 @@ import { HeaderProp } from '../../types';
 import { downloadClickHandler, getIsLoading } from '../../utils/Utils';
 import Profile from '../User/Profile';
 import { useAuth0 } from '@auth0/auth0-react';
+import insightGraphLogo from '../../assets/images/insightgraph-logo.png';
 
 const Header: React.FC<HeaderProp> = ({ chatOnly, deleteOnClick, setOpenConnection, showBackButton }) => {
   const { colorMode, toggleColorMode } = useContext(ThemeWrapperContext);
@@ -95,30 +96,11 @@ const Header: React.FC<HeaderProp> = ({ chatOnly, deleteOnClick, setOpenConnecti
           aria-label='main navigation'
         >
           <section className='flex w-1/3 shrink-0 grow-0 items-center min-w-[200px]'>
-            <Typography variant='h1'>
-              <Logo className='h-6 min-h-6 min-w-12 md:h-8 md:min-h-12 md:min-w-24 md:mr-2' type='full' />
-            </Typography>
+            <div className='app-header-brand' aria-label='InsightGraph'>
+              <img className='app-header-logo' src={insightGraphLogo} alt='InsightGraph logo' />
+              <span className='app-header-title'>InsightGraph</span>
+            </div>
           </section>
-          {
-            <section className='flex items-center justify-center px-2 min-w-0'>
-              <div className='w-full max-w-[920px]'>
-                <Banner className='!py-1.5 !px-3 !min-h-0 text-xs leading-tight'>
-                  试用 Neo4j Aura 中的{' '}
-                  <TextLink
-                    as='a'
-                    htmlAttributes={{
-                      href: URLS.DOCUMENT_INTELLIGENCE,
-                      target: '_blank',
-                      rel: 'noopener noreferrer',
-                    }}
-                  >
-                    文档智能
-                  </TextLink>
-                </Banner>
-              </div>
-            </section>
-          }
-
           {!chatOnly ? (
             <section className='items-center justify-end w-1/3 grow-0 flex'>
               <div>

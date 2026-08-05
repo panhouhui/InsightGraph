@@ -469,6 +469,28 @@
   background: rgb(var(--theme-palette-neutral-bg-default));
 }
 
+.app-header-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 10px;
+  min-width: 0;
+}
+
+.app-header-logo {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.app-header-title {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+  color: rgb(var(--theme-palette-neutral-text-strong));
+}
+
 .app-sidebar {
   display: flex;
   flex-direction: column;
@@ -492,10 +514,16 @@
   justify-content: center;
   width: 38px;
   height: 38px;
-  border-radius: 8px;
-  color: #fff;
-  font-weight: 700;
-  background: #014063;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 5px 14px rgba(15, 23, 42, 0.12);
+}
+
+.app-sidebar-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
 }
 
 .app-sidebar-title {

@@ -4,6 +4,7 @@ import {
   DocumentTextIconSolid,
 } from '@neo4j-ndl/react/icons';
 import { RiKey2Line, RiSettings3Line } from 'react-icons/ri';
+import insightGraphLogo from '../../assets/images/insightgraph-logo.png';
 
 export type WorkspacePanel = 'documents' | 'sources' | 'chat' | 'modelConfig';
 
@@ -44,7 +45,9 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ activePanel, onPanelChange, onG
   return (
     <aside className='app-sidebar'>
       <div className='app-sidebar-brand'>
-        <span className='app-sidebar-brand-mark'>IG</span>
+        <span className='app-sidebar-brand-mark'>
+          <img className='app-sidebar-logo' src={insightGraphLogo} alt='InsightGraph logo' />
+        </span>
         <div>
           <div className='app-sidebar-title'>InsightGraph</div>
           <div className='app-sidebar-subtitle'>知识图谱构建器</div>
