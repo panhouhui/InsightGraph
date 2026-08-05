@@ -1,4 +1,5 @@
 import logging
+import httpx
 from langchain_core.documents import Document
 from langchain_openai import ChatOpenAI, AzureChatOpenAI
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -41,6 +42,11 @@ def should_disable_structured_output(model: str) -> bool:
     """Some OpenAI-compatible providers report tool support but return plain text."""
     normalized_model = (model or "").upper().replace(".", "_").replace("-", "_")
     return "MINIMAX" in normalized_model
+
+
+def _build_openai_http_client():
+    """Use direct egress instead of inheriting a broken system proxy."""
+    return httpx.Client(trust_env=False)
 
 
 def _flatten_graph_items(value):
@@ -191,6 +197,7 @@ def get_llm(model: str):
                 api_key=api_key,
                 model=model_name,
                 callbacks=callback_manager,
+                http_client=_build_openai_http_client(),
                 )
             else:
                 llm = ChatOpenAI(
@@ -198,6 +205,7 @@ def get_llm(model: str):
                 model=model_name,
                 temperature=0,
                 callbacks=callback_manager,
+                http_client=_build_openai_http_client(),
                 )
 
         elif "AZURE" in model:
@@ -246,6 +254,7 @@ def get_llm(model: str):
                 model=model_name,
                 temperature=0,
                 callbacks=callback_manager,
+                http_client=_build_openai_http_client(),
             )
 
         elif "GROQ" in model:
@@ -286,6 +295,7 @@ def get_llm(model: str):
                 model=model_name,
                 temperature=0,
                 callbacks=callback_manager,
+                http_client=_build_openai_http_client(),
             )
     except Exception as e:
         err = f"Error while creating LLM '{model}': {str(e)}"

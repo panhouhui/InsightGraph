@@ -961,24 +961,24 @@ const Content: React.FC<ContentProps> = ({
               placement='top'
               text={
                 !isAuthenticated && !SKIP_AUTH
-                  ? 'Please log in first'
+                  ? '请先登录'
                   : !connectionStatus
-                    ? 'Please connect to Neo4j'
-                    : 'Enhance graph quality'
+                    ? '请先连接 Neo4j'
+                    : '增强图谱质量'
               }
-              label='Graph Enhancement Settings'
+              label='图谱增强设置'
               className='mr-2!'
               onClick={toggleEnhancementDialog}
               disabled={!connectionStatus || isReadOnlyUser}
               size={isTablet ? 'small' : 'medium'}
               alwaysShowTooltip={true}
             >
-              Graph Settings
+              图谱设置
             </ButtonWithToolTip>
             {!connectionStatus ? (
               <SpotlightTarget id='connectbutton' hasPulse={!connectDisabled} indicatorVariant='border'>
                 <ButtonWithToolTip
-                  text={connectDisabled ? 'Please login first to connect' : buttonCaptions.connectToNeo4j}
+                  text={connectDisabled ? '请先登录再连接' : buttonCaptions.connectToNeo4j}
                   label={buttonCaptions.connectToNeo4j}
                   disabled={connectDisabled}
                   size={isTablet ? 'small' : 'medium'}
@@ -1033,9 +1033,9 @@ const Content: React.FC<ContentProps> = ({
           <Flex flexDirection='row' gap='4' className='self-end mb-2.5' flexWrap='wrap'>
             <SpotlightTarget id='generategraphbtn'>
               <ButtonWithToolTip
-                text={!isAuthenticated && !SKIP_AUTH ? 'Please log in first' : tooltips.generateGraph}
+                text={!isAuthenticated && !SKIP_AUTH ? '请先登录' : tooltips.generateGraph}
                 placement='top'
-                label='generate graph'
+                label='生成图谱'
                 onClick={onClickHandler}
                 disabled={disableCheck || isReadOnlyUser}
                 className='mr-0.5'
@@ -1049,16 +1049,16 @@ const Content: React.FC<ContentProps> = ({
             <ButtonWithToolTip
               text={
                 !isAuthenticated && !SKIP_AUTH
-                  ? 'Please log in first'
+                  ? '请先登录'
                   : !selectedfileslength
-                    ? 'Please select file to delete'
+                    ? '请选择要删除的文件'
                     : `${selectedfileslength} ${tooltips.deleteSelectedFiles}`
               }
               placement='top'
               onClick={() => setShowDeletePopUp(true)}
               disabled={!selectedfileslength || isReadOnlyUser}
               className='ml-0.5'
-              label='Delete Files'
+              label='删除文件'
               size={isTablet ? 'small' : 'medium'}
               alwaysShowTooltip={true}
             >
@@ -1070,12 +1070,12 @@ const Content: React.FC<ContentProps> = ({
                 <ButtonWithToolTip
                   text={
                     !selectedfileslength || selectedfileslength === 0
-                      ? 'Please select file to Preview Graph'
+                      ? '请选择要预览图谱的文件'
                       : completedfileNo === 0
-                        ? 'Please select completed file(s) to Preview Graph'
-                        : `${selectedfileslength} selected, ${completedfileNo} file(s) ready to preview`
+                        ? '请选择已完成的文件来预览图谱'
+                        : `已选择 ${selectedfileslength} 个，其中 ${completedfileNo} 个文件可预览`
                   }
-                  label='Preview Graph'
+                  label='预览图谱'
                   onClick={handleGraphView}
                   alwaysShowTooltip={true}
                   disabled={showGraphCheck}

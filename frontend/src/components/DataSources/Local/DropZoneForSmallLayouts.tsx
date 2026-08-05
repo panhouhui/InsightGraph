@@ -216,9 +216,7 @@ export default function DropZoneForSmallLayouts() {
         }
       }
       if (skippedFileNames.length) {
-        showNormalToast(
-          `${skippedFileNames.join(', ')} ${skippedFileNames.length > 1 ? 'are' : 'is'} already being processed. Please wait for it to finish before re-uploading.`
-        );
+        showNormalToast(`${skippedFileNames.join(', ')} 已在处理中，请等待完成后再重新上传。`);
       }
       setFilesData(copiedFilesData);
     }

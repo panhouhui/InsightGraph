@@ -3,6 +3,7 @@ import {
   DataGridComponents,
   Flex,
   IconButton,
+  LoadingSpinner,
   ProgressBar,
   StatusIndicator,
   TextLink,
@@ -71,6 +72,28 @@ import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 
 let onlyfortheFirstRender = true;
+
+const ChineseDataGridLoadingPlaceholder = () => (
+  <div className='nld-table-placeholder-wrapper' role='row'>
+    <div role='cell' className='ndl-data-grid-placeholder'>
+      <div className='ndl-data-grid-loading-placeholder'>
+        <LoadingSpinner />
+        <h6>正在加载数据</h6>
+      </div>
+    </div>
+  </div>
+);
+
+const ChineseDataGridNoDataPlaceholder = () => (
+  <div className='nld-table-placeholder-wrapper' role='row'>
+    <div role='cell' className='ndl-data-grid-placeholder'>
+      <div className='ndl-data-grid-loading-placeholder'>
+        <LoadingSpinner />
+        <h6>暂无数据</h6>
+      </div>
+    </div>
+  </div>
+);
 
 const FileTable: ForwardRefRenderFunction<ChildRef, FileTableProps> = (props, ref) => {
   const { connectionStatus, setConnectionStatus, onInspect, onRetry, onChunkView } = props;
@@ -1133,6 +1156,8 @@ const FileTable: ForwardRefRenderFunction<ChildRef, FileTableProps> = (props, re
               className: 'content-file-table filetable',
             }}
             components={{
+              LoadingPlaceholder: ChineseDataGridLoadingPlaceholder,
+              NoDataPlaceholder: ChineseDataGridNoDataPlaceholder,
               Body: () => (
                 <DataGridComponents.Body
                   innerProps={{

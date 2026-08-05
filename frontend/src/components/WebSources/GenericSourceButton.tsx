@@ -13,7 +13,7 @@ export default function GenericButton({ openModal }: DataComponentProps) {
         <Flex gap='0'>
           <div className='align-self-center flex! justify-center'>
             <IconButtonWithToolTip
-              label='Source info'
+              label='来源说明'
               clean
               text={
                 <Typography variant='body-small'>

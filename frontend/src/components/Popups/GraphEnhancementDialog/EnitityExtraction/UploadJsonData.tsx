@@ -44,11 +44,11 @@ const UploadJsonData = ({ onSchemaExtracted }: UploadJsonDataProps) => {
               nodeObjectTypes: graphSchema.nodeObjectTypes,
             });
           } else {
-            showErrorToast('Invalid graphSchema format');
+            showErrorToast('graphSchema 格式无效');
           }
         } catch (err) {
           console.error(err);
-          showErrorToast('Failed to parse JSON file.');
+          showErrorToast('JSON 文件解析失败。');
         } finally {
           setIsLoading(false);
         }
@@ -56,13 +56,13 @@ const UploadJsonData = ({ onSchemaExtracted }: UploadJsonDataProps) => {
       fileReader.readAsText(file as File);
     } catch (err) {
       console.error(err);
-      showErrorToast('Error reading file.');
+      showErrorToast('读取文件失败。');
       setIsLoading(false);
     }
   };
   return (
     <Dropzone
-      loadingComponent={isLoading && <Loader title='Uploading' />}
+      loadingComponent={isLoading && <Loader title='正在上传' />}
       isTesting={true}
       className='bg-none! dropzoneContainer'
       supportedFilesDescription={
@@ -71,7 +71,7 @@ const UploadJsonData = ({ onSchemaExtracted }: UploadJsonDataProps) => {
             <span>{buttonCaptions.importDropzoneSpan}</span>
             <div className='align-self-center'>
               <IconButtonWithToolTip
-                label='Source info'
+                label='来源说明'
                 clean
                 text={
                   <Typography variant='body-small'>
@@ -94,7 +94,7 @@ const UploadJsonData = ({ onSchemaExtracted }: UploadJsonDataProps) => {
         onDrop: onDropHandler,
         onDropRejected: (e) => {
           if (e.length) {
-            showErrorToast('Failed To Upload, Unsupported file extension.');
+            showErrorToast('上传失败，不支持的文件扩展名。');
           }
         },
       }}

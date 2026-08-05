@@ -263,7 +263,7 @@ export const buttonCaptions = {
 export const URLS = {
   DOCUMENT_INTELLIGENCE: 'https://console.neo4j.io/document-intelligence',
   DOCUMENTATION: 'https://neo4j.com/labs/genai-ecosystem/llm-graph-builder',
-  GITHUB_ISSUES: 'https://github.com/neo4j-labs/llm-graph-builder/issues',
+  GITHUB_ISSUES: 'https://github.com/panhouhui/InsightGraph/edit/main/README.md',
 };
 
 export const POST_PROCESSING_JOBS: { title: string; description: string }[] = [

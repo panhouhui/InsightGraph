@@ -82,9 +82,7 @@ const DropZone: FunctionComponent = () => {
         }
       }
       if (skippedFileNames.length) {
-        showNormalToast(
-          `${skippedFileNames.join(', ')} ${skippedFileNames.length > 1 ? 'are' : 'is'} already being processed. Please wait for it to finish before re-uploading.`
-        );
+        showNormalToast(`${skippedFileNames.join(', ')} 已在处理中，请等待完成后再重新上传。`);
       }
       setFilesData(copiedFilesData);
     }
@@ -230,7 +228,7 @@ const DropZone: FunctionComponent = () => {
                 <span>{buttonCaptions.dropzoneSpan}</span>
                 <div className='align-self-center'>
                   <IconButtonWithToolTip
-                    label='Source info'
+                    label='来源说明'
                     clean
                     text={
                       <Typography variant='body-small'>
@@ -269,7 +267,7 @@ const DropZone: FunctionComponent = () => {
             },
             onDropRejected: (e) => {
               if (e.length) {
-                showErrorToast('Failed To Upload, Unsupported file extention');
+                showErrorToast('上传失败，不支持的文件扩展名。');
               }
             },
           }}

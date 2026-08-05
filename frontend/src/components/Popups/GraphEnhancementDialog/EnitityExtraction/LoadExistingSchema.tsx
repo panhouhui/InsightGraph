@@ -53,7 +53,7 @@ const LoadDBSchemaDialog = ({ open, onClose, onApply }: LoadDBSchemaDialogProps)
         setDbNodes([]);
         setDbRels([]);
         setDbPattern([]);
-        setMessage('No data found');
+        setMessage('未找到可用数据');
         return;
       }
       const schemaTuples: TupleType[] = schemaData
