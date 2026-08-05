@@ -197,7 +197,7 @@ export const tooltips = {
   deleteSelectedFiles: '个文件将被删除',
   previewGraphSelectedFiles: '个文件可预览图谱',
   documentation: '文档',
-  github: 'GitHub Issues',
+  github: 'GitHub 仓库',
   theme: '浅色 / 深色模式',
   settings: '实体图谱抽取设置',
   chat: '开始聊天',
@@ -263,7 +263,7 @@ export const buttonCaptions = {
 export const URLS = {
   DOCUMENT_INTELLIGENCE: 'https://console.neo4j.io/document-intelligence',
   DOCUMENTATION: 'https://neo4j.com/labs/genai-ecosystem/llm-graph-builder',
-  GITHUB_ISSUES: 'https://github.com/panhouhui/InsightGraph/edit/main/README.md',
+  GITHUB_ISSUES: 'https://github.com/panhouhui/InsightGraph',
 };
 
 export const POST_PROCESSING_JOBS: { title: string; description: string }[] = [

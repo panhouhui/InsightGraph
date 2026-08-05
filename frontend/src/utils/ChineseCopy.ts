@@ -60,7 +60,7 @@ const exactTranslations: Record<string, string> = {
   'File/Files to be deleted': '个文件将被删除',
   'File/Files to Preview Graph': '个文件可预览图谱',
   Documentation: '文档',
-  'GitHub Issues': 'GitHub 问题',
+  'GitHub 仓库': 'GitHub 仓库',
   'Light / Dark mode': '浅色 / 深色模式',
   'Entity Graph Extraction Settings': '实体图谱抽取设置',
   'Start a chat': '开始聊天',

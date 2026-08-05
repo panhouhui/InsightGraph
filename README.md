@@ -91,10 +91,7 @@ https://api.minimax.io/v1
 - 前端文案已统一为中文。
 - 压缩包支持加密文件场景。
 - 大文件一次最大支持 10 万个字符。
-- GitHub 按钮已改为跳转到本仓库的 README 编辑页。
 
 ## 相关链接
 
 - [Neo4j LLM Graph Builder 原仓库](https://github.com/neo4j-labs/llm-graph-builder)
-- [README 编辑页](https://github.com/panhouhui/InsightGraph/edit/main/README.md)
-
