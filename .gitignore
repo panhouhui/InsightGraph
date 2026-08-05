@@ -180,3 +180,4 @@ startupfrontend.sh
 mcp.json
 .runtime-logs/
 backend/_zip_text_preview.txt
+frontend/.vite/
